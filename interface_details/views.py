@@ -4,7 +4,7 @@ from django.shortcuts import (get_object_or_404,
 from .models import router
 from .forms import routerform
 from django.http import HttpResponse, JsonResponse
-import strgen
+import rstr
 import random
 
 # Create your views here.
@@ -73,58 +73,58 @@ def delete_view(request, id):
     return render(request, "delete_view.html", context)
 
 
-def generateRec(request):
-    id = request.GET.get('id', None)
+def gendata(request,id):
     id = int(id)
-
-    f#ields = ['sapid', 'hostname', 'loopback', 'mac_address']
+    data_out=[]
 
     if id > 1:
         for i in range(id):
-            randString = generateString()
-            router=router()
-            router.sapid = randString['sapid']
-            router.hostname = randString['hostname']
-            router.loopback = randString['loopback']
-            router.mac_address = randString['mac_address']
-            router.save()
+            randString = generatedata()
+            rtr=router()
+            rtr.sapid = randString['sapid']
+            rtr.hostname = randString['hostname']
+            rtr.loopback = randString['loopback']
+            rtr.mac_address = randString['mac_address']
+            rtr.save()
 
-        detail = router.objects.get(id=router.id)
+            data = {
+                'id': rtr.id,
+                'sapid': randString['sapid'],
+                'hostname': randString['hostname'],
+                'loopback': randString['loopback'],
+                'mac_address': randString['mac_address']
+            }
+            data_out.append(data)
 
-        data = {
-            'id': detail.id,
-            'sapid': randString['sapid'],
-            'hostname': randString['hostname'],
-            'loopback': randString['loopback'],
-            'mac_address': randString['mac_address']
-        }
+        #detail = rtr.objects.get(id=rtr.id)
 
-        return JsonResponse(data, safe=False)
+
+
 
     else:
-        randString = generateString()
-        router = router()
-        router.sapid = randString['sapid']
-        router.hostname = randString['hostname']
-        router.ip_address = randString['loopback']
-        router.mac_address = randString['mac_address']
-        router.save()
+        randString = generatedata()
+        rtr = router()
+        rtr.sapid = randString['sapid']
+        rtr.hostname = randString['hostname']
+        rtr.ip_address = randString['loopback']
+        rtr.mac_address = randString['mac_address']
+        rtr.save()
 
         data = {
-            'id': router.id,
+            'id': rtr.id,
             'sapid': randString['sapid'],
             'hostname': randString['hostname'],
             'loopback': randString['loopback'],
             'mac_address': randString['mac_address']
         }
 
-        return JsonResponse(data, safe=False)
+        data_out.append(data)
 
+    return JsonResponse(data_out, safe=False)
 
-def generateString():
-    hostname = strgen.StringGenerator("[\w\d]{10}").render()
-    num = random.random()
-    sap_id = int(num * 100)
+def generatedata():
+    hostname = rstr.xeger("[\w\d]{10}")
+    sapid = random.randint(1,999999999999999999)
 
     def ipAdd(n):
         ip_add = ''

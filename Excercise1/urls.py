@@ -22,5 +22,7 @@ urlpatterns = [
     path('create/',det_views.create_view),
     path('<id>/',det_views.detail_view),
     path('<id>/update/',det_views.update_view),
-    path('<id>/delete/',det_views.delete_view)
+    path('<id>/delete/',det_views.delete_view),
+    path('<id>/generate/',det_views.gendata)
+
 ]
