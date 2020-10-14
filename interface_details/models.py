@@ -9,4 +9,4 @@ class router(models.Model):
     hostname = models.CharField(max_length=14)
     loopback = models.GenericIPAddressField()
     mac_address = models.CharField(max_length=17)
-    #is_deleted = models.BooleanField(default=False)
+    
